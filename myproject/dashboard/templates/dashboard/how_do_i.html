@@ -58,8 +58,48 @@
         }
         .answer {
             color: #666;
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 3px;
+        }
+        .faq-item.active .answer {
+            display: block;
+        }
+        .faq-item {
+            cursor: pointer;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        .faq-item:hover {
+            background-color: #e9ecef;
+        }
+        .faq-item.active {
+            background-color: #e9ecef;
+            border-color: #007bff;
         }
     </style>
+    <script>
+        function toggleFAQ(id) {
+            const allItems = document.querySelectorAll('.faq-item');
+            const currentItem = document.getElementById('faq-' + id);
+            
+            // Close all other items
+            allItems.forEach(item => {
+                if (item !== currentItem) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Toggle current item
+            currentItem.classList.toggle('active');
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -72,25 +112,12 @@
         <div class="help-section">
             <h2 class="help-title">Frequently Asked Questions</h2>
             
-            <div class="faq-item">
-                <div class="question">How do I reset my password?</div>
-                <div class="answer">Click on the "Forgot Password" link on the login page and follow the instructions.</div>
+            {% for faq in faq_data %}
+            <div class="faq-item" id="faq-{{ faq.id }}" onclick="toggleFAQ('{{ faq.id }}')">
+                <div class="question">{{ faq.question }}</div>
+                <div class="answer">{{ faq.answer }}</div>
             </div>
-            
-            <div class="faq-item">
-                <div class="question">How do I update my contact information?</div>
-                <div class="answer">Navigate to your profile settings and update your details.</div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="question">How do I view my statements?</div>
-                <div class="answer">Click on "View E-Statement" from the dashboard menu.</div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="question">How do I report a problem?</div>
-                <div class="answer">Use the "Report an Issue" option from the dashboard menu.</div>
-            </div>
+            {% endfor %}
         </div>
         
         <div class="help-section">

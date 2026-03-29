@@ -36,9 +36,44 @@
             text-align: center;
             padding: 40px;
         }
-        .message {
-            font-size: 18px;
+        .statement-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+        .statement-table th,
+        .statement-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .statement-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        .statement-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status.paid {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status.pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .no-statements {
             color: #666;
+            font-style: italic;
         }
     </style>
 </head>
@@ -51,8 +86,42 @@
         <a href="{% url 'dashboard' %}" class="back-link">← Back to Dashboard</a>
         
         <div class="content">
-            <p class="message">E-Statement functionality will be implemented here.</p>
-            <p>This page will display your electronic statements.</p>
+            <h2>Your Electronic Statements</h2>
+            
+            {% if statements %}
+            <table class="statement-table">
+                <thead>
+                    <tr>
+                        <th>Statement Period</th>
+                        <th>Service Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for statement in statements %}
+                    <tr>
+                        <td>{{ statement.period }}</td>
+                        <td>{{ statement.type }}</td>
+                        <td>{{ statement.amount }}</td>
+                        <td>
+                            <span class="status {{ statement.status|lower }}">{{ statement.status }}</span>
+                        </td>
+                        <td>{{ statement.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="no-statements">No statements available at this time.</p>
+            {% endif %}
+            
+            <div class="summary">
+                <h3>Summary</h3>
+                <p>Total Statements: {{ statements|length }}</p>
+                <p>Most Recent: {{ statements.0.period }}</p>
+            </div>
         </div>
     </div>
 </body>
